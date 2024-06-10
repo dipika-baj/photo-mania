@@ -8,6 +8,7 @@ A photo sharing app that allows user to create, edit, delete and view photo and 
 - [Dependencies](#dependencies)
 - [Installation](#installation)
 - [Run](#run)
+- [Wireframe](#wireframe)
 
 ## Features
 
@@ -57,3 +58,9 @@ Start the development server with the following command:
 ```
 npm run dev
 ```
+
+## Wireframe
+
+Wireframe for the app
+
+https://www.figma.com/design/GyAw04xNSd6hA1EwL8vlqy/Photo-Sharing?node-id=0-1&t=B8ZpZwuTDUL9XMvz-0
