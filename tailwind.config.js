@@ -7,9 +7,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        "blue": "#507DBC"
+        "blue": "#507DBC",
+        "black-25": "#00000040"
       },
       spacing: {
+        "800": "800px",
         "1200": "1200px"
       }
     },
