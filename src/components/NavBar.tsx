@@ -3,16 +3,16 @@ import LoginSignUp from "./LoginSignUp";
 import Modal from "./reusable/Modal";
 
 const NavBar = () => {
-  const { setShowModal, showModal } = useModalContext();
+  const { showModal, viewModal } = useModalContext();
 
   return (
     <>
       <div className="bg-blue">
-        <div className="m-auto flex w-full max-w-1200 items-center justify-between px-6 py-3">
-          <img src="/photomania-logo.png" className="w-20" />
+        <div className="md:max-w-1350 m-auto flex w-10/12 w-full items-center justify-between px-6 py-3">
+          <img src="/photomania-logo-white.png" className="w-20" />
           <button
-            onClick={() => setShowModal((prev) => !prev)}
-            className="rounded-md bg-pink p-3 text-white"
+            onClick={() => viewModal()}
+            className="rounded-md p-3 text-white transition-colors duration-200 hover:bg-pink"
           >
             Signup | Login
           </button>

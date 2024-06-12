@@ -3,6 +3,8 @@ import React, { createContext, ReactNode, useState } from "react";
 interface ModalContextValue {
   showModal: boolean;
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  viewModal: () => void;
+  hideModal: () => void;
 }
 
 const ModalContext = createContext<ModalContextValue | undefined>(undefined);
@@ -13,7 +15,10 @@ interface ModalContextProviderProps {
 
 function ModalContextProvider({ children }: ModalContextProviderProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const value = { showModal, setShowModal };
+  const viewModal = () => setShowModal(true);
+  const hideModal = () => setShowModal(false);
+
+  const value = { showModal, setShowModal, viewModal, hideModal };
   return (
     <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
   );
