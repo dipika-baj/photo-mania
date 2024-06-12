@@ -17,7 +17,7 @@ const Modal = ({ children }: Props) => {
         }}
         className="absolute top-0 h-screen w-full bg-black-25"
       ></div>
-      <div className="fixed left-1/2 top-20 w-1/2 max-w-650 -translate-x-1/2 justify-center rounded-br-xl rounded-tl-xl bg-white p-10">
+      <div className="fixed left-1/2 top-20 w-11/12 max-w-650 -translate-x-1/2 justify-center rounded-br-xl rounded-tl-xl bg-white p-5 md:p-10">
         {children}
       </div>
     </>,
