@@ -10,3 +10,18 @@ export interface Post {
 export interface PostResult {
   posts: Post[];
 }
+
+export interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface ErrorResponse {
+  status: string;
+  code?: string;
+  message: string;
+}

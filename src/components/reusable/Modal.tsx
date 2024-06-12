@@ -1,17 +1,26 @@
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
+import { useModalContext } from "../../context/modalContext";
+
 type Props = {
   children: ReactNode;
 };
 
 const Modal = ({ children }: Props) => {
+  const { setShowModal } = useModalContext();
   return createPortal(
-    <div className="bg-black-25 absolute top-0 flex h-screen w-full justify-center">
-      <div className="max-w-800 absolute top-20 m-auto w-1/2 rounded-br-xl rounded-tl-xl bg-white p-10">
+    <>
+      <div
+        onClick={() => {
+          setShowModal((prev) => !prev);
+        }}
+        className="absolute top-0 h-screen w-full bg-black-25"
+      ></div>
+      <div className="fixed left-1/2 top-20 w-1/2 max-w-650 -translate-x-1/2 justify-center rounded-br-xl rounded-tl-xl bg-white p-10">
         {children}
       </div>
-    </div>,
+    </>,
     document.getElementById("root")!,
   );
 };

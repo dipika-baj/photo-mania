@@ -1,22 +1,26 @@
-import { useLoginContext } from "../context/loginContext";
+import { useModalContext } from "../context/modalContext";
+import LoginSignUp from "./LoginSignUp";
 import Modal from "./reusable/Modal";
 
 const NavBar = () => {
-  const { setShowLoginModal, showLoginModal } = useLoginContext();
+  const { setShowModal, showModal } = useModalContext();
 
   return (
     <>
       <div className="bg-blue">
-        <div className="max-w-1200 m-auto flex w-full items-center justify-between px-6 py-3">
+        <div className="m-auto flex w-full max-w-1200 items-center justify-between px-6 py-3">
           <img src="/photomania-logo.png" className="w-20" />
-          <button onClick={() => setShowLoginModal((prev) => !prev)}>
-            Signup/Login
+          <button
+            onClick={() => setShowModal((prev) => !prev)}
+            className="rounded-md bg-pink p-3 text-white"
+          >
+            Signup | Login
           </button>
         </div>
       </div>
-      {showLoginModal && (
+      {showModal && (
         <Modal>
-          <></>
+          <LoginSignUp />
         </Modal>
       )}
     </>
