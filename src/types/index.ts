@@ -11,13 +11,18 @@ export interface PostResult {
   posts: Post[];
 }
 
-export interface FormData {
+export interface SignUpFormData {
   firstName: string;
   lastName: string;
   email: string;
   username: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface LoginFormData {
+  emailUsername: string;
+  password: string;
 }
 
 export interface ErrorResponse {

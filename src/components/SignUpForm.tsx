@@ -1,15 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
 import { z, ZodType } from "zod";
 
-import { ErrorResponse, FormData } from "../types";
+import { ErrorResponse, SignUpFormData } from "../types";
 import { NAME_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from "../utils/constants";
 
-const SignUpForm = () => {
+interface Prop {
+  onTabChange: (tab: string) => void;
+}
+
+const SignUpForm = ({ onTabChange }: Prop) => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
-  const schema: ZodType<FormData> = z
+  const schema: ZodType<SignUpFormData> = z
     .object({
       firstName: z
         .string()
@@ -58,26 +62,36 @@ const SignUpForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<SignUpFormData>({
     resolver: zodResolver(schema),
   });
 
-  const { isLoading, error, mutate } = useMutation({
-    mutationFn: (data: FormData) =>
+  const { mutate } = useMutation({
+    mutationFn: (data: SignUpFormData) =>
       fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
           "Content-Type": "application/json",
         },
-      }).then((res) => res.json()),
+      }).then((res) => {
+        return res.json();
+      }),
+    onSuccess: (data) => {
+      if (data.status === "error") {
+        setResponseError(data);
+      } else {
+        setResponseError(null);
+        onTabChange("login");
+      }
+    },
+
+    onError: () => {
+      return <p>An Error has occured</p>;
+    },
   });
 
-  if (isLoading) return <div>"Loading..."</div>;
-
-  if (error) return <div>"Error has occured"</div>;
-
-  const registerUser = (data: FormData) => {
+  const registerUser = (data: SignUpFormData) => {
     mutate(data, {
       onSuccess: (data) => {
         if (data.status === "error") {
@@ -89,15 +103,11 @@ const SignUpForm = () => {
     });
   };
 
-  if (responseError === null) {
-    return <p>ok</p>;
-  }
-
   return (
     <form className="w-full" onSubmit={handleSubmit(registerUser)}>
       <div className="flex flex-col gap-6">
-        <div className="flex gap-6">
-          <div className="w-1/2">
+        <div className="flex flex-col gap-6 md:flex-row">
+          <div className="w-full md:w-1/2">
             <input
               {...register("firstName")}
               type="text"
@@ -108,7 +118,7 @@ const SignUpForm = () => {
               <span className="text-red-600">{errors.firstName.message}</span>
             )}
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <input
               {...register("lastName")}
               type="text"
@@ -120,7 +130,7 @@ const SignUpForm = () => {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-6">
           <div className="w-full">
             <input
               {...register("email")}
@@ -136,7 +146,7 @@ const SignUpForm = () => {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-6">
           <div className="w-full">
             <input
               {...register("username")}
@@ -152,8 +162,8 @@ const SignUpForm = () => {
             )}
           </div>
         </div>
-        <div className="flex gap-2">
-          <div className="w-1/2">
+        <div className="flex flex-col gap-6 md:flex-row">
+          <div className="w-full md:w-1/2">
             <input
               {...register("password")}
               type="password"
@@ -164,7 +174,7 @@ const SignUpForm = () => {
               <span className="text-red-600">{errors.password.message}</span>
             )}
           </div>
-          <div className="w-1/2">
+          <div className="w-full md:w-1/2">
             <input
               {...register("confirmPassword")}
               type="password"
