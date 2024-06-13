@@ -1,11 +1,16 @@
+import { useState } from "react";
+
 import { useAuthContext } from "../context/authContext";
 import { useModalContext } from "../context/modalContext";
+import Add from "../icons/Add";
+import CreatePost from "./CreatePost";
 import LoginSignUp from "./LoginSignUp";
 import LogOut from "./LogOut";
 import Modal from "./reusable/Modal";
 
 const NavBar = () => {
   const { showModal, viewModal } = useModalContext();
+  const [showFormModal, setShowFormModal] = useState(false);
   const { loggedIn } = useAuthContext();
 
   return (
@@ -15,20 +20,33 @@ const NavBar = () => {
           <img src="/photomania-logo-white.png" className="w-20" />
           {!loggedIn ? (
             <button
-              onClick={() => viewModal()}
+              onClick={() => {
+                setShowFormModal(true);
+                viewModal();
+              }}
               className="rounded-md p-3 text-white transition-colors duration-200 hover:bg-pink"
             >
               Signup | Login
             </button>
           ) : (
-            <LogOut />
+            <div className="flex gap-2">
+              <div
+                className="rounded-full bg-white p-1 text-blue"
+                onClick={() => {
+                  setShowFormModal(false);
+                  viewModal();
+                }}
+              >
+                <Add />
+              </div>
+              <LogOut />
+            </div>
           )}
         </div>
       </div>
+
       {showModal && (
-        <Modal>
-          <LoginSignUp />
-        </Modal>
+        <Modal>{showFormModal ? <LoginSignUp /> : <CreatePost />}</Modal>
       )}
     </>
   );
