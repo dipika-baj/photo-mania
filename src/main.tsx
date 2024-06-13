@@ -5,6 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import App from "./App.tsx";
+import { AuthContextProvider } from "./context/authContext.tsx";
 import { ModalContextProvider } from "./context/modalContext.tsx";
 
 const queryClient = new QueryClient();
@@ -13,7 +14,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ModalContextProvider>
-        <App />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </ModalContextProvider>
     </QueryClientProvider>
   </React.StrictMode>,

@@ -2,14 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z, ZodType } from "zod";
 
+import { useAuthContext } from "../context/authContext";
 import { useModalContext } from "../context/modalContext";
 import { ErrorResponse, LoginFormData } from "../types";
 
 const LoginForm = () => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
   const { hideModal } = useModalContext();
+  const { logIn } = useAuthContext();
   const schema: ZodType<LoginFormData> = z.object({
     emailUsername: z
       .string()
@@ -45,8 +48,9 @@ const LoginForm = () => {
         setResponseError(data);
       } else {
         setResponseError(null);
-        document.cookie = `token=${data.data.token} path=/;`;
         hideModal();
+        logIn(data.data.token);
+        toast.success("Login Successful");
       }
     },
 
@@ -93,7 +97,7 @@ const LoginForm = () => {
         <input
           type="submit"
           value={"Log In"}
-          className="hover:bg-dark-pink w-full cursor-pointer rounded-md bg-pink p-3 text-white transition-colors duration-200"
+          className="w-full cursor-pointer rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
         />
       </div>
     </form>
