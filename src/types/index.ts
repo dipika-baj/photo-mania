@@ -25,8 +25,18 @@ export interface LoginFormData {
   password: string;
 }
 
+export interface PostForm {
+  image: File | null;
+  caption?: string;
+}
+
 export interface ErrorResponse {
   status: string;
   code?: string;
   message: string;
+}
+
+export interface PostFormError {
+  image?: string;
+  caption?: string;
 }
