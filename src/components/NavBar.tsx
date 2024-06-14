@@ -30,7 +30,7 @@ const NavBar = () => {
             </button>
           ) : (
             <div className="flex gap-2">
-              <div
+              <button
                 className="rounded-full bg-white p-1 text-blue"
                 onClick={() => {
                   setShowFormModal(false);
@@ -38,7 +38,7 @@ const NavBar = () => {
                 }}
               >
                 <Add />
-              </div>
+              </button>
               <LogOut />
             </div>
           )}
