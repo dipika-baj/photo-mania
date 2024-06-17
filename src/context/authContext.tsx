@@ -1,11 +1,14 @@
 import React, { createContext, ReactNode, useState } from "react";
 
-import { getToken } from "../utils/token";
+import { LoginData } from "../types";
+import { getCookie } from "../utils/token";
 
 interface AuthContextValue {
   loggedIn: boolean;
   setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
-  logIn: (token: string) => void;
+  loggedUser: number | null;
+  setLoggedUser: React.Dispatch<React.SetStateAction<number | null>>;
+  logIn: (user: LoginData) => void;
   logOut: () => void;
 }
 
@@ -16,20 +19,33 @@ interface AuthContextProviderProps {
 }
 
 function AuthContextProvider({ children }: AuthContextProviderProps) {
-  const isLoggedIn = getToken();
+  const isLoggedIn = getCookie("token");
+  const userId = Number(getCookie("userId"));
   const [loggedIn, setLoggedIn] = useState<boolean>(!!isLoggedIn);
+  const [loggedUser, setLoggedUser] = useState<number | null>(userId);
 
-  const logIn = (token: string) => {
+  const logIn = (user: LoginData) => {
     setLoggedIn(true);
-    document.cookie = `token=${token}; path=/;`;
+    document.cookie = `token=${user.token}; path=/;`;
+    setLoggedUser(user.id);
+    document.cookie = `userId=${user.id}; path=/;`;
   };
 
   const logOut = () => {
     setLoggedIn(false);
-    document.cookie = "token=; expires=01 Jan 1970 00:00:00 UTC;;";
+    document.cookie = "token=; path=/; expires=01 Jan 1970 00:00:00 UTC;;";
+    setLoggedUser(null);
+    document.cookie = "userId=;path=/; expires=01 Jan 1970 00:00:00 UTC;;";
   };
 
-  const value = { loggedIn, setLoggedIn, logIn, logOut: logOut };
+  const value = {
+    loggedIn,
+    setLoggedIn,
+    logIn,
+    logOut,
+    loggedUser,
+    setLoggedUser,
+  };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

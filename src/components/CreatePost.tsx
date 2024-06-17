@@ -7,7 +7,7 @@ import { queryClient } from "../App";
 import { useModalContext } from "../context/ModalContext";
 import { PostForm, PostFormError } from "../types";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
-import { getToken } from "../utils/token";
+import { getCookie } from "../utils/token";
 
 const CreatePost = () => {
   const [post, setPost] = useState<PostForm>({
@@ -20,7 +20,7 @@ const CreatePost = () => {
   });
   const [imagePreview, setImagePreview] = useState<string>("");
   const { hideModal } = useModalContext();
-  const token = getToken();
+  const token = getCookie("token");
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createPosts"],

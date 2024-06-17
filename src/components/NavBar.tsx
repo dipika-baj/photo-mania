@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../context/AuthContext";
 import { useModalContext } from "../context/ModalContext";
@@ -17,7 +18,9 @@ const NavBar = () => {
     <>
       <div className="sticky top-0 bg-blue">
         <div className="m-auto flex w-10/12 items-center justify-between py-3 md:max-w-1350">
-          <img src="/photomania-logo-white.png" className="w-20" />
+          <Link to="/">
+            <img src="/photomania-logo-white.png" className="w-20" />
+          </Link>
           {!loggedIn ? (
             <button
               onClick={() => {

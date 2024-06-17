@@ -44,6 +44,17 @@ export interface LoginFormData {
   password: string;
 }
 
+export interface LoginData {
+  id: number;
+  emailUsername: string;
+  token: string;
+}
+
+export interface LoginResult {
+  status: string;
+  data: LoginData;
+}
+
 export interface PostForm {
   image: File | null;
   caption?: string;

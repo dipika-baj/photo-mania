@@ -41,7 +41,7 @@ const LoginForm = () => {
       } else {
         setResponseError(null);
         hideModal();
-        logIn(data.data.token);
+        logIn(data.data);
         toast.success("Login Successful");
       }
     },

@@ -3,13 +3,13 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { useAuthContext } from "../context/AuthContext";
-import { getToken } from "../utils/token";
+import { getCookie } from "../utils/token";
 
 const LogOut = () => {
   const { logOut } = useAuthContext();
   const [enabled, setEnabled] = useState(false);
 
-  const token = getToken();
+  const token = getCookie("token");
 
   const { isLoading, error } = useQuery({
     enabled: enabled,
@@ -35,7 +35,9 @@ const LogOut = () => {
   return (
     <button
       className="text-white"
-      onClick={() => setEnabled(true)}
+      onClick={() => {
+        setEnabled(true);
+      }}
       disabled={isLoading}
     >
       Logout
