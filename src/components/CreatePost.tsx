@@ -116,7 +116,10 @@ const CreatePost = () => {
         <form className="flex flex-col gap-4" onSubmit={createPost}>
           {imagePreview ? (
             <div className="flex flex-col gap-4">
-              <img className="m-auto max-w-400" src={imagePreview} />
+              <img
+                className="max-w-200 md:max-w-300 m-auto"
+                src={imagePreview}
+              />
               <div className="flex justify-center gap-3">
                 <label
                   className="cursor-pointer rounded-md bg-blue p-3 text-center text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"

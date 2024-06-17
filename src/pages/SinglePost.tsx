@@ -31,7 +31,7 @@ const SinglePost = () => {
   return (
     <>
       <NavBar />
-      <div className="md:max-w-800 m-auto my-5 flex w-11/12 flex-col items-start gap-4 py-3">
+      <div className="lg:max-w-600 m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3">
         <div className="flex w-full items-end justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-light-gray"></div>
@@ -46,11 +46,13 @@ const SinglePost = () => {
             </button>
           )}
         </div>
-        <img
-          src={getImageURL(post.imageUrl)}
-          className="w-full rounded-md shadow-md"
-        />
-        {post.caption && <p>{post.caption}</p>}
+        <div className="w-full rounded-md shadow-md">
+          <img src={getImageURL(post.imageUrl)} className="m-auto rounded-md" />
+        </div>
+        <div className="flex gap-3">
+          <p className="font-semibold">{post.user.username}</p>
+          {post.caption && <p>{post.caption}</p>}
+        </div>
       </div>
     </>
   );
