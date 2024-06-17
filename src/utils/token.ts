@@ -1,4 +1,4 @@
-export const getToken = () => {
+export const getCookie = (cookieName: string) => {
   const decodedCookie = decodeURIComponent(document.cookie);
   const cookieArray = decodedCookie.split(";");
   for (let i = 0; i < cookieArray.length; i++) {
@@ -6,8 +6,8 @@ export const getToken = () => {
     while (cookie.charAt(0) === " ") {
       cookie = cookie.substring(1);
     }
-    if (cookie.indexOf("token=") === 0) {
-      return cookie.substring("token=".length, cookie.length);
+    if (cookie.indexOf(`${cookieName}=`) === 0) {
+      return cookie.substring(`${cookieName}=`.length, cookie.length);
     }
   }
 };

@@ -4,11 +4,16 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ModalContextProvider } from "./context/ModalContext";
 import HomePage from "./pages/HomePage";
+import SinglePost from "./pages/SinglePost";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomePage />,
+  },
+  {
+    path: "post/:postId",
+    element: <SinglePost />,
   },
 ]);
 

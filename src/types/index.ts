@@ -5,7 +5,7 @@ export interface Post {
   imageName: string;
   imageUrl: string;
   updatedAt: string;
-  user: User[];
+  user: User;
 }
 
 export interface User {
@@ -42,6 +42,17 @@ export interface SignUpFormData {
 export interface LoginFormData {
   emailUsername: string;
   password: string;
+}
+
+export interface LoginData {
+  id: number;
+  emailUsername: string;
+  token: string;
+}
+
+export interface LoginResult {
+  status: string;
+  data: LoginData;
 }
 
 export interface PostForm {

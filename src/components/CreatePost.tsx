@@ -7,7 +7,7 @@ import { queryClient } from "../App";
 import { useModalContext } from "../context/ModalContext";
 import { PostForm, PostFormError } from "../types";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
-import { getToken } from "../utils/token";
+import { getCookie } from "../utils/token";
 
 const CreatePost = () => {
   const [post, setPost] = useState<PostForm>({
@@ -20,7 +20,7 @@ const CreatePost = () => {
   });
   const [imagePreview, setImagePreview] = useState<string>("");
   const { hideModal } = useModalContext();
-  const token = getToken();
+  const token = getCookie("token");
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createPosts"],
@@ -116,7 +116,10 @@ const CreatePost = () => {
         <form className="flex flex-col gap-4" onSubmit={createPost}>
           {imagePreview ? (
             <div className="flex flex-col gap-4">
-              <img className="m-auto max-w-400" src={imagePreview} />
+              <img
+                className="max-w-200 md:max-w-300 m-auto"
+                src={imagePreview}
+              />
               <div className="flex justify-center gap-3">
                 <label
                   className="cursor-pointer rounded-md bg-blue p-3 text-center text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"
