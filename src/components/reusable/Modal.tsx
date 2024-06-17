@@ -1,5 +1,5 @@
 import { CircleX } from "lucide-react";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import { useModalContext } from "../../context/ModalContext";
@@ -10,6 +10,12 @@ type Props = {
 
 const Modal = ({ children }: Props) => {
   const { hideModal } = useModalContext();
+  useEffect(() => {
+    document.body.classList.add("overflow-hidden");
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, []);
   return createPortal(
     <>
       <div
