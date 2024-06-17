@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { Ellipsis } from "lucide-react";
 import { useParams } from "react-router-dom";
 
+import DropDownMenu from "../components/DropDownMenu";
 import NavBar from "../components/NavBar";
 import ErrorComponent from "../components/reusable/ErrorComponent";
 import Loading from "../components/reusable/Loading";
@@ -31,8 +31,8 @@ const SinglePost = () => {
   return (
     <>
       <NavBar />
-      <div className="lg:max-w-600 m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3">
-        <div className="flex w-full items-end justify-between">
+      <div className="m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3 lg:max-w-600">
+        <div className="relative flex w-full items-end justify-between">
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-light-gray"></div>
             <div>
@@ -40,11 +40,7 @@ const SinglePost = () => {
               <p>{date}</p>
             </div>
           </div>
-          {loggedUser === post.user.id && (
-            <button>
-              <Ellipsis strokeWidth={3} />
-            </button>
-          )}
+          {loggedUser === post.user.id && <DropDownMenu />}
         </div>
         <div className="w-full rounded-md shadow-md">
           <img src={getImageURL(post.imageUrl)} className="m-auto rounded-md" />
