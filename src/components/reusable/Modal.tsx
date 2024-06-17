@@ -1,8 +1,8 @@
+import { CircleX } from "lucide-react";
 import { ReactNode } from "react";
 import { createPortal } from "react-dom";
 
-import { useModalContext } from "../../context/modalContext";
-import Close from "../../icons/Close";
+import { useModalContext } from "../../context/ModalContext";
 
 type Props = {
   children: ReactNode;
@@ -21,12 +21,12 @@ const Modal = ({ children }: Props) => {
           className="absolute right-5 top-4 cursor-pointer text-light-gray transition-colors duration-200 hover:text-black"
           onClick={() => hideModal()}
         >
-          <Close />
+          <CircleX />
         </div>
         {children}
       </div>
     </>,
-    document.getElementById("root")!,
+    document.getElementById("modal")!,
   );
 };
 

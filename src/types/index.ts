@@ -5,10 +5,29 @@ export interface Post {
   imageName: string;
   imageUrl: string;
   updatedAt: string;
+  user: User[];
+}
+
+export interface User {
+  id: number;
+  createdAt: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  updatedAt: string;
+  username: string;
+}
+
+export interface Pagination {
+  count: number;
+  page: number;
+  totalPages: number;
+  pageSize: number;
 }
 
 export interface PostResult {
-  posts: Post[];
+  data: Post[];
+  pagination: Pagination;
 }
 
 export interface SignUpFormData {

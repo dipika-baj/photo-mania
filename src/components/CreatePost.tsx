@@ -1,9 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
+import { Upload } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 
-import { useModalContext } from "../context/modalContext";
-import Upload from "../icons/Upload";
+import { queryClient } from "../App";
+import { useModalContext } from "../context/ModalContext";
 import { PostForm, PostFormError } from "../types";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
 import { getToken } from "../utils/token";
@@ -22,18 +23,21 @@ const CreatePost = () => {
   const token = getToken();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: FormData) => {
-      const response = await fetch("http://localhost:3000/api/post/create", {
+    mutationKey: ["createPosts"],
+    mutationFn: (data: FormData) =>
+      fetch("http://localhost:3000/api/post/create", {
         method: "POST",
         body: data,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      });
-      return response.json();
-    },
+      }).then((res) => {
+        return res.json();
+      }),
+
     onSuccess: (data) => {
       if (data.status === "success") {
+        queryClient.invalidateQueries({ queryKey: ["posts"] });
         toast.success("Post Created");
         hideModal();
       }
@@ -112,7 +116,7 @@ const CreatePost = () => {
         <form className="flex flex-col gap-4" onSubmit={createPost}>
           {imagePreview ? (
             <div className="flex flex-col gap-4">
-              <img className="max-w-400 m-auto" src={imagePreview} />
+              <img className="m-auto max-w-400" src={imagePreview} />
               <div className="flex justify-center gap-3">
                 <label
                   className="cursor-pointer rounded-md bg-blue p-3 text-center text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"

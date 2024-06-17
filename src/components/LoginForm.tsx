@@ -3,35 +3,27 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z, ZodType } from "zod";
 
-import { useAuthContext } from "../context/authContext";
-import { useModalContext } from "../context/modalContext";
+import { useAuthContext } from "../context/AuthContext";
+import { useModalContext } from "../context/ModalContext";
 import { ErrorResponse, LoginFormData } from "../types";
+import { loginSchema } from "../utils/zodSchemas";
 
 const LoginForm = () => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
   const { hideModal } = useModalContext();
   const { logIn } = useAuthContext();
-  const schema: ZodType<LoginFormData> = z.object({
-    emailUsername: z
-      .string()
-      .min(1, { message: "Email/Username cannot empty." }),
-    password: z
-      .string()
-      .trim()
-      .min(1, { message: "Password cannot be empty." }),
-  });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(loginSchema),
   });
 
   const { mutate } = useMutation({
+    mutationKey: ["login"],
     mutationFn: (data: LoginFormData) =>
       fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
