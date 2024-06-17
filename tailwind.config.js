@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -16,7 +17,17 @@ export default {
       spacing: {
         "1350": "1350px",
         "650": "650px",
-        "400": "400px"
+        "400": "400px",
+        "500": "500px"
+      },
+      keyframes: {
+        pulsing: {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+        }
+      },
+      animation: {
+        pulsing: 'pulsing 3s ease-in-out infinite'
       }
     },
   },

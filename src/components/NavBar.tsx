@@ -1,8 +1,8 @@
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
-import { useAuthContext } from "../context/authContext";
-import { useModalContext } from "../context/modalContext";
-import Add from "../icons/Add";
+import { useAuthContext } from "../context/AuthContext";
+import { useModalContext } from "../context/ModalContext";
 import CreatePost from "./CreatePost";
 import LoginSignUp from "./LoginSignUp";
 import LogOut from "./LogOut";
@@ -15,7 +15,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="bg-blue">
+      <div className="sticky top-0 bg-blue">
         <div className="m-auto flex w-10/12 items-center justify-between py-3 md:max-w-1350">
           <img src="/photomania-logo-white.png" className="w-20" />
           {!loggedIn ? (
@@ -37,7 +37,7 @@ const NavBar = () => {
                   viewModal();
                 }}
               >
-                <Add />
+                <Plus strokeWidth={3} />{" "}
               </button>
               <LogOut />
             </div>

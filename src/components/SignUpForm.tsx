@@ -3,10 +3,9 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z, ZodType } from "zod";
 
 import { ErrorResponse, SignUpFormData } from "../types";
-import { NAME_REGEX, PASSWORD_REGEX, USERNAME_REGEX } from "../utils/constants";
+import { signUpSchema } from "../utils/zodSchemas";
 
 interface Prop {
   onTabChange: (tab: string) => void;
@@ -14,60 +13,17 @@ interface Prop {
 
 const SignUpForm = ({ onTabChange }: Prop) => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
-  const schema: ZodType<SignUpFormData> = z
-    .object({
-      firstName: z
-        .string()
-        .trim()
-        .min(1, { message: "First name cannot be empty." })
-        .regex(NAME_REGEX, {
-          message:
-            "Name can have only aphabets and must be minimum 3 characters.",
-        }),
-      lastName: z
-        .string()
-        .trim()
-        .min(1, { message: "Last name cannot be empty." })
-        .regex(NAME_REGEX, {
-          message:
-            "Name can have only aphabets and must be minimum 3 characters.",
-        }),
-      email: z
-        .string()
-        .min(1, { message: "Email cannot empty." })
-        .email("Email is invalid."),
-      username: z
-        .string()
-        .trim()
-        .min(1, { message: "Username cannot be empty." })
-        .regex(USERNAME_REGEX, {
-          message:
-            "Username can only contain letters, digits, and underscores, must be minimum 7 character and start with letter or underscore.",
-        }),
-      password: z
-        .string()
-        .trim()
-        .min(1, { message: "Password cannot be empty." })
-        .regex(PASSWORD_REGEX, {
-          message:
-            "Password must contain minimum eight characters, at least one letter, one number and one special character.",
-        }),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: "Passwords do not Match.",
-      path: ["confirmPassword"],
-    });
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignUpFormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(signUpSchema),
   });
 
   const { mutate } = useMutation({
+    mutationKey: ["signUp"],
     mutationFn: (data: SignUpFormData) =>
       fetch("http://localhost:3000/api/auth/register", {
         method: "POST",
@@ -193,7 +149,7 @@ const SignUpForm = ({ onTabChange }: Prop) => {
         <input
           type="submit"
           value={"Sign Up"}
-          className="hover:bg-dark-pink w-full rounded-md bg-pink p-3 text-white transition-colors duration-200"
+          className="w-full rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
         />
       </div>
     </form>
