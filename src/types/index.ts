@@ -5,7 +5,7 @@ export interface Post {
   imageName: string;
   imageUrl: string;
   updatedAt: string;
-  user: User[];
+  user: User;
 }
 
 export interface User {
