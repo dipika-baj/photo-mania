@@ -1,3 +1,10 @@
+export enum ActiveModal {
+  login,
+  createPost,
+  editPost,
+  deletePost,
+}
+
 export interface Post {
   caption: string;
   createdAt: string;

@@ -3,9 +3,9 @@ import { Upload } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { toast } from "sonner";
 
-import { queryClient } from "../App";
 import { useModalContext } from "../context/ModalContext";
 import { PostForm, PostFormError } from "../types";
+import { queryClient } from "../utils/clientQuery";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
 import { getCookie } from "../utils/token";
 
@@ -117,7 +117,7 @@ const CreatePost = () => {
           {imagePreview ? (
             <div className="flex flex-col gap-4">
               <img
-                className="max-w-200 md:max-w-300 m-auto"
+                className="m-auto max-w-200 md:max-w-300"
                 src={imagePreview}
               />
               <div className="flex justify-center gap-3">

@@ -1,10 +1,11 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import { AuthContextProvider } from "./context/AuthContext";
 import { ModalContextProvider } from "./context/ModalContext";
 import HomePage from "./pages/HomePage";
 import SinglePost from "./pages/SinglePost";
+import { queryClient } from "./utils/clientQuery";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-export const queryClient = new QueryClient();
 function App() {
   return (
     <>

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { Toaster } from "sonner";
 
 import DropDownMenu from "../components/DropDownMenu";
 import NavBar from "../components/NavBar";
@@ -40,7 +41,7 @@ const SinglePost = () => {
               <p>{date}</p>
             </div>
           </div>
-          {loggedUser === post.user.id && <DropDownMenu />}
+          {loggedUser === post.user.id && <DropDownMenu post={post} />}
         </div>
         <div className="w-full rounded-md shadow-md">
           <img src={getImageURL(post.imageUrl)} className="m-auto rounded-md" />
@@ -50,6 +51,12 @@ const SinglePost = () => {
           {post.caption && <p>{post.caption}</p>}
         </div>
       </div>
+      <Toaster
+        richColors
+        position="bottom-left"
+        duration={3000}
+        closeButton={true}
+      />
     </>
   );
 };
