@@ -1,17 +1,16 @@
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../context/AuthContext";
 import { useModalContext } from "../context/ModalContext";
+import { ActiveModal } from "../types";
 import CreatePost from "./CreatePost";
 import LoginSignUp from "./LoginSignUp";
 import LogOut from "./LogOut";
 import Modal from "./reusable/Modal";
 
 const NavBar = () => {
-  const { showModal, viewModal } = useModalContext();
-  const [showFormModal, setShowFormModal] = useState(false);
+  const { showModal, setShowModal } = useModalContext();
   const { loggedIn } = useAuthContext();
 
   return (
@@ -24,8 +23,7 @@ const NavBar = () => {
           {!loggedIn ? (
             <button
               onClick={() => {
-                setShowFormModal(true);
-                viewModal();
+                setShowModal(ActiveModal.login);
               }}
               className="rounded-md p-3 text-white transition-colors duration-200 hover:bg-pink"
             >
@@ -36,11 +34,10 @@ const NavBar = () => {
               <button
                 className="rounded-full bg-white p-1 text-blue"
                 onClick={() => {
-                  setShowFormModal(false);
-                  viewModal();
+                  setShowModal(ActiveModal.createPost);
                 }}
               >
-                <Plus strokeWidth={3} />{" "}
+                <Plus strokeWidth={3} />
               </button>
               <LogOut />
             </div>
@@ -48,8 +45,16 @@ const NavBar = () => {
         </div>
       </div>
 
-      {showModal && (
-        <Modal>{showFormModal ? <LoginSignUp /> : <CreatePost />}</Modal>
+      {showModal === ActiveModal.login && (
+        <Modal>
+          <LoginSignUp />
+        </Modal>
+      )}
+
+      {showModal === ActiveModal.createPost && (
+        <Modal>
+          <CreatePost />
+        </Modal>
       )}
     </>
   );

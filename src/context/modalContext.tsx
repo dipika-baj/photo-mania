@@ -1,9 +1,10 @@
 import React, { createContext, ReactNode, useState } from "react";
 
+import { ActiveModal } from "../types";
+
 interface ModalContextValue {
-  showModal: boolean;
-  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-  viewModal: () => void;
+  showModal: ActiveModal | null;
+  setShowModal: React.Dispatch<React.SetStateAction<ActiveModal | null>>;
   hideModal: () => void;
 }
 
@@ -14,11 +15,10 @@ interface ModalContextProviderProps {
 }
 
 function ModalContextProvider({ children }: ModalContextProviderProps) {
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const viewModal = () => setShowModal(true);
-  const hideModal = () => setShowModal(false);
+  const [showModal, setShowModal] = useState<ActiveModal | null>(null);
+  const hideModal = () => setShowModal(null);
 
-  const value = { showModal, setShowModal, viewModal, hideModal };
+  const value = { showModal, setShowModal, hideModal };
   return (
     <ModalContext.Provider value={value}>{children}</ModalContext.Provider>
   );
