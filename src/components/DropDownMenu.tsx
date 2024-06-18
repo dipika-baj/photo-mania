@@ -2,10 +2,16 @@ import { Ellipsis } from "lucide-react";
 import { useState } from "react";
 
 import { useModalContext } from "../context/ModalContext";
-import { ActiveModal } from "../types";
+import { ActiveModal, Post } from "../types";
+import DeletePost from "./DeletePost";
 import Modal from "./reusable/Modal";
+import UpdatePost from "./UpdatePost";
 
-const DropDownMenu = () => {
+interface Prop {
+  post: Post;
+}
+
+const DropDownMenu = ({ post }: Prop) => {
   const [dropDown, setDropDown] = useState<boolean>(false);
   const { showModal, setShowModal } = useModalContext();
   return (
@@ -38,13 +44,13 @@ const DropDownMenu = () => {
 
       {showModal === ActiveModal.editPost && (
         <Modal>
-          <p>Update</p>
+          <UpdatePost singlePost={post} />
         </Modal>
       )}
 
       {showModal === ActiveModal.deletePost && (
         <Modal>
-          <p>Delete</p>
+          <DeletePost postId={post.id} />
         </Modal>
       )}
     </>
