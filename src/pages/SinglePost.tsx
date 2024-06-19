@@ -32,7 +32,13 @@ const SinglePost = () => {
     <div className="m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3 lg:max-w-600">
       <div className="relative flex w-full items-end justify-between">
         <div className="flex items-center gap-3">
-          <Link to={`/user/${post.user.username}`}>
+          <Link
+            to={
+              loggedUser === post.user.id
+                ? `/profile`
+                : `/user/${post.user.username}`
+            }
+          >
             <div className="h-10 w-10">
               {post.user.imageUrl ? (
                 <img
@@ -47,7 +53,13 @@ const SinglePost = () => {
             </div>
           </Link>
           <div>
-            <Link to={`/user/${post.user.username}`}>
+            <Link
+              to={
+                loggedUser === post.user.id
+                  ? `/profile`
+                  : `/user/${post.user.username}`
+              }
+            >
               <p className="font-semibold">{post.user.username}</p>
             </Link>
             <p>{date}</p>
@@ -59,7 +71,13 @@ const SinglePost = () => {
         <img src={getImageURL(post.imageUrl)} className="m-auto rounded-md" />
       </div>
       <div className="flex gap-3">
-        <Link to={`/user/${post.user.username}`}>
+        <Link
+          to={
+            loggedUser === post.user.id
+              ? `/profile`
+              : `/user/${post.user.username}`
+          }
+        >
           <p className="font-semibold">{post.user.username}</p>
         </Link>
         {post.caption && <p>{post.caption}</p>}

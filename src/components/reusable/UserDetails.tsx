@@ -19,7 +19,7 @@ const UserDetails = ({ user }: Prop) => {
         )}
       </div>
       <div className="w-full text-center md:w-1/2 md:text-left">
-        <h1 className="md:mb-2 md:text-4xl">
+        <h1 className="capitalize md:mb-2 md:text-4xl">
           {user.firstName}&nbsp;{user.lastName}
         </h1>
         <h2 className="md:text-2xl">{user.username}</h2>

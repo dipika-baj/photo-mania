@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+import { useAuthContext } from "../../context/AuthContext";
 import { Post } from "../../types";
 import { getImageURL } from "../../utils/imageUrl";
 import { getInitials } from "../../utils/profile";
@@ -10,6 +11,8 @@ interface Prop {
 }
 
 const PostGridItem = ({ post, includeUser }: Prop) => {
+  const { loggedUser } = useAuthContext();
+
   return (
     <div className="flex flex-col justify-end gap-2">
       <Link to={`/post/${post.id}`}>
@@ -24,7 +27,13 @@ const PostGridItem = ({ post, includeUser }: Prop) => {
 
       {includeUser && (
         <div className="flex items-center gap-2">
-          <Link to={`user/${post.user.username}`}>
+          <Link
+            to={
+              loggedUser === post.user.id
+                ? `/profile`
+                : `/user/${post.user.username}`
+            }
+          >
             <div className="h-8 w-8">
               {post.user.imageUrl ? (
                 <img
@@ -38,7 +47,13 @@ const PostGridItem = ({ post, includeUser }: Prop) => {
               )}
             </div>
           </Link>
-          <Link to={`user/${post.user.username}`}>
+          <Link
+            to={
+              loggedUser === post.user.id
+                ? `/profile`
+                : `/user/${post.user.username}`
+            }
+          >
             <p>{post.user.username}</p>
           </Link>
         </div>
