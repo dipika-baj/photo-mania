@@ -12,9 +12,7 @@ const Explore = () => {
       queryFn: ({ pageParam }) =>
         fetch(
           `http://localhost:3000/api/post/?page=${pageParam}&pageSize=12`,
-        ).then((res) => {
-          return res.json();
-        }),
+        ).then((res) => res.json()),
       getNextPageParam: (lastPage) => {
         if (lastPage.pagination.totalPages === lastPage.pagination.page) {
           return undefined;

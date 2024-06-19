@@ -1,12 +1,11 @@
-import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { useAuthContext } from "../context/AuthContext";
 import { useModalContext } from "../context/ModalContext";
 import { ActiveModal } from "../types";
 import CreatePost from "./CreatePost";
+import LoggedButton from "./LoggedButton";
 import LoginSignUp from "./LoginSignUp";
-import LogOut from "./LogOut";
 import Modal from "./reusable/Modal";
 
 const NavBar = () => {
@@ -30,17 +29,7 @@ const NavBar = () => {
               Signup | Login
             </button>
           ) : (
-            <div className="flex gap-2">
-              <button
-                className="rounded-full bg-white p-1 text-blue"
-                onClick={() => {
-                  setShowModal(ActiveModal.createPost);
-                }}
-              >
-                <Plus strokeWidth={3} />
-              </button>
-              <LogOut />
-            </div>
+            <LoggedButton />
           )}
         </div>
       </div>

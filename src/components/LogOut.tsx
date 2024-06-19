@@ -34,7 +34,7 @@ const LogOut = () => {
 
   return (
     <button
-      className="text-white"
+      className="border-b border-light-gray px-6 py-2 hover:bg-light-gray"
       onClick={() => {
         setEnabled(true);
       }}

@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ModalContextProvider } from "./context/ModalContext";
 import HomePage from "./pages/HomePage";
+import Profile from "./pages/Profile";
 import SinglePost from "./pages/SinglePost";
 import User from "./pages/User";
 import { queryClient } from "./utils/clientQuery";
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "user/:username",
         element: <User />,
+      },
+      {
+        path: "/profile",
+        element: <Profile />,
       },
     ],
   },

@@ -3,6 +3,7 @@ export enum ActiveModal {
   createPost,
   editPost,
   deletePost,
+  editProfile,
 }
 
 export interface Post {
@@ -41,6 +42,9 @@ export interface PostResult {
 
 export interface UserResult {
   data: User;
+  status: string;
+  code?: string;
+  message?: string;
 }
 
 export interface SignUpFormData {
@@ -82,4 +86,10 @@ export interface ErrorResponse {
 export interface PostFormError {
   image?: string;
   caption?: string;
+}
+
+export interface UpdateUserFormData {
+  firstName: string;
+  lastName: string;
+  username: string;
 }
