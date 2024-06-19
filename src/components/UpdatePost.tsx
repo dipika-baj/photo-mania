@@ -54,14 +54,12 @@ const UpdatePost = ({ singlePost }: Prop) => {
         return res.json();
       }),
 
-    onSuccess: (data) => {
-      if (data.status === "success") {
-        queryClient.invalidateQueries({ queryKey: ["posts"] });
-        toast.success("Post Updated");
-        hideModal();
-        setPost({ image: null, caption: "" });
-        setImagePreview("");
-      }
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post", singlePost.id] });
+      toast.success("Post Updated");
+      hideModal();
+      setPost({ image: null, caption: "" });
+      setImagePreview("");
     },
   });
 

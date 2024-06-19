@@ -1,6 +1,5 @@
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Toaster } from "sonner";
 
 import { useAuthContext } from "../context/AuthContext";
 import { useModalContext } from "../context/ModalContext";
@@ -57,12 +56,6 @@ const NavBar = () => {
           <CreatePost />
         </Modal>
       )}
-      <Toaster
-        richColors
-        position="bottom-left"
-        duration={3000}
-        closeButton={true}
-      />
     </>
   );
 };
