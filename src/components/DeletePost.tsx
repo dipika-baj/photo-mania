@@ -28,7 +28,7 @@ const DeletePost = ({ postId }: { postId: number }) => {
           setEnabled(false);
           hideModal();
           toast.success("Post Deleted");
-          setTimeout(() => navigate("/"), 1500);
+          navigate("/");
           return res.json();
         }
       }),

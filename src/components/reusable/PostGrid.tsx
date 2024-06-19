@@ -8,21 +8,32 @@ interface Props {
   loading: boolean;
   hasNextPage: boolean;
   loadMore: () => void;
+  includeUser?: boolean;
 }
 
-const PostGrid = ({ posts, loading, loadMore, hasNextPage }: Props) => {
+const PostGrid = ({
+  posts,
+  loading,
+  loadMore,
+  hasNextPage,
+  includeUser,
+}: Props) => {
   const [infiniteRef] = useInfiniteScroll({
     loading,
     hasNextPage,
     onLoadMore: loadMore,
     rootMargin: "0px 0px 20px 0px",
   });
+
+  if (includeUser === undefined) {
+    includeUser = true;
+  }
   return (
     <>
       <div className="flex justify-center">
         <div className="grid w-full grid-cols-1 gap-9 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <PostGridItem key={post.id} post={post} />
+            <PostGridItem key={post.id} post={post} includeUser={includeUser} />
           ))}
         </div>
       </div>

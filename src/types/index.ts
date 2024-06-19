@@ -23,6 +23,8 @@ export interface User {
   lastName: string;
   updatedAt: string;
   username: string;
+  imageUrl: string;
+  imageName: string;
 }
 
 export interface Pagination {
@@ -35,6 +37,10 @@ export interface Pagination {
 export interface PostResult {
   data: Post[];
   pagination: Pagination;
+}
+
+export interface UserResult {
+  data: User;
 }
 
 export interface SignUpFormData {
