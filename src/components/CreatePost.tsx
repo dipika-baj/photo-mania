@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { Upload } from "lucide-react";
-import { ChangeEvent, useState } from "react";
+import { PencilIcon, Upload, X } from "lucide-react";
+import { ChangeEvent, createRef, useState } from "react";
+import { Cropper, ReactCropperElement } from "react-cropper";
 import { toast } from "sonner";
 
 import { useModalContext } from "../context/ModalContext";
@@ -23,6 +24,7 @@ const CreatePost = () => {
   const { hideModal } = useModalContext();
   const token = getCookie("token");
   const userId = Number(getCookie("userId"));
+  const cropperRef = createRef<ReactCropperElement>();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createPosts"],
@@ -58,7 +60,6 @@ const CreatePost = () => {
       const formData = new FormData();
       formData.append("image", post.image);
       if (post.caption) formData.append("caption", post?.caption);
-
       mutate(formData);
     }
   };
@@ -111,11 +112,19 @@ const CreatePost = () => {
       image: null,
     }));
   };
-  /**
-   * TODO
-   * Remove change and remove button
-   * Loading State in buttons while calling api
-   */
+
+  const onCropStart = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "cropped_image.png", {
+            type: "image/png",
+          });
+          setPost((post) => ({ ...post, image: file }));
+        }
+      });
+    }
+  };
 
   return (
     <>
@@ -123,23 +132,27 @@ const CreatePost = () => {
         <H3>Create New Post</H3>
         <form className="flex flex-col gap-4" onSubmit={createPost}>
           {imagePreview ? (
-            <div className="flex flex-col gap-4">
-              <img
-                className="m-auto max-w-200 cursor-pointer border-2 border-dashed border-light-gray p-2 md:max-w-300"
+            <div className="relative flex flex-col gap-4">
+              <Cropper
+                style={{ width: "100%" }}
+                ref={cropperRef}
+                aspectRatio={16 / 9}
                 src={imagePreview}
+                guides={true}
+                cropstart={onCropStart}
               />
-              <div className="flex justify-center gap-3">
+              <div className="absolute right-3 top-3 flex flex-col items-center gap-3">
                 <label
-                  className="cursor-pointer rounded-md bg-blue p-3 text-center text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"
+                  className="cursor-pointer rounded-md bg-blue p-2 text-center text-white transition-colors duration-200 hover:bg-dark-blue"
                   htmlFor="image"
                 >
-                  Change
+                  <PencilIcon size={16} />
                 </label>
                 <button
-                  className="rounded-md bg-light-gray p-3 text-black transition-colors duration-200 hover:bg-blue hover:text-white"
+                  className="hover:bg-dark-gray rounded-md bg-light-gray p-2 text-black transition-colors duration-200"
                   onClick={handleRemoveImage}
                 >
-                  Remove
+                  <X size={16} />
                 </button>
               </div>
 
@@ -164,7 +177,7 @@ const CreatePost = () => {
                   accept=".jpg,.jpeg,.png,.webp"
                   onChange={handleImageChange}
                 />
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue text-white transition-colors duration-200 hover:bg-light-gray">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue text-white transition-colors duration-200 hover:bg-dark-blue">
                   <Upload />
                 </div>
                 <p>
@@ -193,7 +206,7 @@ const CreatePost = () => {
           </div>
 
           <button
-            className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
+            className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-black"
             disabled={isPending}
           >
             Create Post

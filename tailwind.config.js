@@ -13,6 +13,7 @@ export default {
         "pink": "#B86177",
         "dark-pink": "#975162",
         "light-gray": "#d4d4d5",
+        "dark-gray": "#b8b8ba"
 
       },
       spacing: {

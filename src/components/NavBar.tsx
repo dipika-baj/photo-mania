@@ -24,7 +24,7 @@ const NavBar = () => {
               onClick={() => {
                 setShowModal(ActiveModal.login);
               }}
-              className="hover:bg-dark-blue rounded-md p-3 text-white transition-colors duration-200"
+              className="rounded-md p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
             >
               Signup | Login
             </button>

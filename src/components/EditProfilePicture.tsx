@@ -87,7 +87,7 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
       {imagePreview ? (
         <div className="relative aspect-square w-10/12">
           <Cropper
-            style={{ width: "100%" }}
+            style={{ width: "100%", maxHeight: "400px" }}
             ref={cropperRef}
             aspectRatio={1}
             src={imagePreview}
@@ -96,16 +96,25 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
           />
           <label
             htmlFor="image"
-            className="absolute right-4 top-4 cursor-pointer text-light-gray transition-colors duration-200 hover:text-black"
+            className="absolute right-4 top-4 cursor-pointer rounded-md bg-blue p-2 text-center text-white transition-colors duration-200 hover:bg-dark-blue"
           >
-            <PencilIcon />
+            <PencilIcon size={16} />
           </label>
         </div>
       ) : (
-        <label htmlFor="image" className="w-10/2 aspect-square rounded-full">
+        <label
+          htmlFor="image"
+          className="w-10/2 aspect-square cursor-pointer rounded-full"
+        >
           <div className="flex h-200 w-200 items-center justify-center rounded-full bg-light-gray text-4xl font-bold uppercase text-white">
             {getInitials(firstName, lastName)}
           </div>
+          <p>
+            <span className="font-bold transition-colors duration-200 hover:text-blue">
+              Click
+            </span>
+            &nbsp;to upload an image
+          </p>
         </label>
       )}
       <input
