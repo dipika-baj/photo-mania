@@ -22,10 +22,10 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["login"],
     mutationFn: (data: LoginFormData) =>
-      fetch("http://localhost:3000/api/auth/login", {
+      fetch(`${import.meta.env.VITE_API}/auth/login`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -89,7 +89,8 @@ const LoginForm = () => {
         <input
           type="submit"
           value={"Log In"}
-          className="hover:bg-dark-blue w-full cursor-pointer rounded-md bg-blue p-3 text-white transition-colors duration-200"
+          className="w-full cursor-pointer rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-black"
+          disabled={isPending}
         />
       </div>
     </form>

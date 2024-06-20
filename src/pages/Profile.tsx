@@ -1,64 +1,101 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 
+import NotFound from "../components/NotFound";
 import ErrorComponent from "../components/reusable/ErrorComponent";
 import Loading from "../components/reusable/Loading";
-import Modal from "../components/reusable/Modal";
+import PostGrid from "../components/reusable/PostGrid";
 import UserDetails from "../components/reusable/UserDetails";
-import EditProfile from "../components/UpdateProfile";
-import UserPosts from "../components/UserPosts";
 import { useModalContext } from "../context/ModalContext";
-import { ActiveModal, UserResult } from "../types";
+import { ActiveModal, PostResult, UserResult } from "../types";
 import { getCookie } from "../utils/token";
 
 const Profile = () => {
   const token = getCookie("token");
-  const { showModal, setShowModal } = useModalContext();
+  const { setShowModal } = useModalContext();
 
-  const { isLoading, error, data } = useQuery<UserResult>({
+  useEffect(() => {
+    if (!token) {
+      setShowModal(ActiveModal.login);
+    }
+  }, [token, setShowModal]);
+
+  const {
+    isLoading: userLoading,
+    error: userError,
+    data: userData,
+  } = useQuery<UserResult>({
+    enabled: !!token,
     queryKey: ["profile"],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/me`, {
+      fetch(`${import.meta.env.VITE_API}/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => {
-        if (res.status === 401) {
-          setShowModal(ActiveModal.login);
+        if (!res.ok) {
+          throw Error("An Error has occured");
         }
         return res.json();
       }),
   });
 
-  if (isLoading) return <Loading />;
+  const {
+    isLoading: isPostLoading,
+    error: postError,
+    data: postsData,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<PostResult>({
+    enabled: !!token,
+    queryKey: ["profilePosts"],
+    queryFn: ({ pageParam }) =>
+      fetch(
+        `${import.meta.env.VITE_API}/me/posts?page=${pageParam}&pageSize=12`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ).then((res) => res.json()),
+    getNextPageParam: (lastPage) => {
+      if (
+        !lastPage.pagination.totalPages ||
+        lastPage.pagination.totalPages === lastPage.pagination.page
+      ) {
+        return undefined;
+      }
+      return lastPage.pagination.page + 1;
+    },
+    initialPageParam: 1,
+  });
 
-  if (error || !data) return <ErrorComponent />;
+  if (userLoading) return <Loading />;
 
-  const user = data.data;
+  if (userError || postError) return <ErrorComponent />;
 
-  if (!user) {
-    return <p>No user Found</p>;
-  }
+  if (!userData || !postsData) return <NotFound />;
+
+  const user = userData.data;
+  const posts = postsData.pages.flatMap((page) => {
+    return page.data;
+  });
 
   return (
     <>
       <div className="-z-10 m-auto flex w-10/12 flex-col gap-20 md:max-w-1350">
         <div className="relative mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
-          <UserDetails user={user} showUpload />
-          <button
-            onClick={() => setShowModal(ActiveModal.editProfile)}
-            className="rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"
-          >
-            Edit Profile
-          </button>
+          <UserDetails user={user} showUpload showUpdate />
         </div>
-        <UserPosts userId={user.id} />
+        <PostGrid
+          posts={posts}
+          loading={isPostLoading}
+          hasNextPage={hasNextPage}
+          loadMore={fetchNextPage}
+          includeUser={false}
+        />
       </div>
-      {showModal === ActiveModal.editProfile && (
-        <Modal>
-          <EditProfile user={user} />
-        </Modal>
-      )}
     </>
   );
 };

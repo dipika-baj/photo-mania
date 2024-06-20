@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
+import NotFound from "../components/NotFound";
 import ErrorComponent from "../components/reusable/ErrorComponent";
 import Loading from "../components/reusable/Loading";
 import UserDetails from "../components/reusable/UserDetails";
@@ -9,10 +10,11 @@ import { UserResult } from "../types";
 
 const User = () => {
   const { username } = useParams() as { username: string };
+
   const { isLoading, error, data } = useQuery<UserResult>({
     queryKey: ["user", username],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/user/${username}`).then((res) =>
+      fetch(`${import.meta.env.VITE_API}/user/${username}`).then((res) =>
         res.json(),
       ),
   });
@@ -23,17 +25,8 @@ const User = () => {
 
   const user = data.data;
 
-  /**
-   * TODO:
-   * 404 page
-   * cropper
-   * put backend url in .env
-   * query in page
-   *
-   */
-
   if (!user) {
-    return <p>No user Found</p>;
+    return <NotFound />;
   }
   return (
     <div className="m-auto mt-10 flex w-10/12 flex-col gap-20 md:max-w-1350">

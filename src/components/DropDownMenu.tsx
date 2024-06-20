@@ -6,6 +6,7 @@ import { useClickOutside } from "../hooks/useOutsideClick";
 import { ActiveModal, Post } from "../types";
 import DeletePost from "./DeletePost";
 import Modal from "./reusable/Modal";
+import Seperator from "./reusable/Seperator";
 import UpdatePost from "./UpdatePost";
 
 interface Prop {
@@ -21,10 +22,7 @@ const DropDownMenu = ({ post }: Prop) => {
     setDropDown(false);
   });
   const { showModal, setShowModal } = useModalContext();
-  /***
-   * TODO
-   * Dropdown menu style
-   */
+
   return (
     <>
       <button onClick={() => setDropDown((prev) => !prev)}>
@@ -33,23 +31,24 @@ const DropDownMenu = ({ post }: Prop) => {
       {dropDown && (
         <div
           ref={dropDownRef}
-          className="absolute right-0 flex translate-y-full flex-col rounded-md bg-white shadow-2xl"
+          className="absolute right-0 top-[18%] z-50 flex flex-col rounded-md border border-light-gray bg-white shadow-2xl sm:top-[12%] md:min-w-200"
         >
           <button
             onClick={() => {
               setShowModal(ActiveModal.editPost);
               setDropDown(false);
             }}
-            className="border-b border-light-gray px-6 py-2 hover:bg-light-gray"
+            className="px-4 py-2 text-left hover:bg-light-gray"
           >
-            Update
+            Edit
           </button>
+          <Seperator />
           <button
             onClick={() => {
               setShowModal(ActiveModal.deletePost);
               setDropDown(false);
             }}
-            className="px-6 py-2 text-red-600 hover:bg-light-gray"
+            className="px-4 py-2 text-left text-red-500 hover:bg-light-gray"
           >
             Delete
           </button>

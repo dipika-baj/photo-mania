@@ -14,7 +14,7 @@ const UserPosts = ({ userId }: Prop) => {
       queryKey: ["userPosts", userId],
       queryFn: ({ pageParam }) =>
         fetch(
-          `http://localhost:3000/api/user/${userId}/posts?page=${pageParam}&pageSize=12`,
+          `${import.meta.env.VITE_API}/user/${userId}/posts?page=${pageParam}&pageSize=12`,
         ).then((res) => res.json()),
       getNextPageParam: (lastPage) => {
         if (

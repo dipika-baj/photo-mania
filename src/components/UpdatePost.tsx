@@ -46,7 +46,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatePosts", singlePost.id],
     mutationFn: (data: FormData) =>
-      fetch(`http://localhost:3000/api/me/post/${singlePost.id}`, {
+      fetch(`${import.meta.env.VITE_API}/post/${singlePost.id}`, {
         method: "PUT",
         body: data,
         headers: {
@@ -98,7 +98,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
 
   const handleCaptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value;
-    if (caption.length === 150) {
+    if (caption.length >= 150) {
       setFormError((error) => ({
         ...error,
         caption: "Caption cannot exceed 150 character",
@@ -115,11 +115,14 @@ const UpdatePost = ({ singlePost }: Prop) => {
     }
   };
   const onCropStart = () => {
+    if (!post.image) {
+      return;
+    }
     if (typeof cropperRef.current?.cropper !== "undefined") {
       cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
         if (blob) {
-          const file = new File([blob], "cropped_image.png", {
-            type: "image/png",
+          const file = new File([blob], post.image!.name, {
+            type: post.image!.type,
           });
           setPost((post) => ({ ...post, image: file }));
         }
@@ -133,12 +136,14 @@ const UpdatePost = ({ singlePost }: Prop) => {
         {imagePreview ? (
           <div className="relative flex flex-col gap-4">
             <Cropper
-              style={{ width: "100%" }}
+              style={{ width: "100%", maxHeight: "400px" }}
               ref={cropperRef}
               aspectRatio={16 / 9}
               src={imagePreview}
               guides={true}
-              cropstart={onCropStart}
+              crop={onCropStart}
+              viewMode={1}
+              autoCropArea={1}
             />
             <div className="absolute right-3 top-3 flex justify-center gap-3">
               <label
@@ -200,7 +205,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
         </div>
 
         <button
-          className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
+          className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-black"
           disabled={isPending}
         >
           Update Post

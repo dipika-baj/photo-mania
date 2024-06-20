@@ -17,7 +17,7 @@ const LoginSignUp = () => {
           <div className="w-1/2 pr-3">
             <button
               onClick={() => onTabChange("login")}
-              className={`w-full rounded-md p-3 transition-colors duration-200 ${tab === "login" ? "bg-blue p-3 text-white" : "bg-light-gray text-black hover:bg-blue hover:text-white"}`}
+              className={`w-full rounded-md p-3 transition-colors duration-200 ${tab === "login" ? "bg-blue p-3 text-white" : "hover:bg-dark-gray bg-light-gray text-black"}`}
             >
               Login
             </button>
@@ -25,7 +25,7 @@ const LoginSignUp = () => {
           <div className="w-1/2 pl-3">
             <button
               onClick={() => onTabChange("register")}
-              className={`w-full rounded-md p-3 transition-colors duration-200 ${tab === "register" ? "bg-blue p-3 text-white" : "bg-light-gray text-black hover:bg-blue hover:text-white"}`}
+              className={`w-full rounded-md p-3 transition-colors duration-200 ${tab === "register" ? "bg-blue p-3 text-white" : "hover:bg-dark-gray bg-light-gray text-black"}`}
             >
               Sign Up
             </button>

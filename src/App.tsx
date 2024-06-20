@@ -1,5 +1,4 @@
 import { QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import { Toaster } from "sonner";
 
@@ -7,6 +6,7 @@ import NavBar from "./components/NavBar";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ModalContextProvider } from "./context/ModalContext";
 import HomePage from "./pages/HomePage";
+import PageNotFound from "./pages/PageNotFound";
 import Profile from "./pages/Profile";
 import SinglePost from "./pages/SinglePost";
 import User from "./pages/User";
@@ -45,6 +45,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
     ],
+    errorElement: <PageNotFound />,
   },
 ]);
 
@@ -57,7 +58,7 @@ function App() {
             <RouterProvider router={router} />
           </AuthContextProvider>
         </ModalContextProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
+        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </QueryClientProvider>
       <Toaster
         richColors
