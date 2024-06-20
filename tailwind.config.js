@@ -9,10 +9,12 @@ export default {
     extend: {
       colors: {
         "blue": "#507DBC",
+        "dark-blue": "#415c82",
         "pink": "#B86177",
         "dark-pink": "#975162",
-        "black-25": "#00000040",
-        "light-gray": "#d4d4d5"
+        "light-gray": "#d4d4d5",
+        "dark-gray": "#b8b8ba"
+
       },
       spacing: {
         "1350": "1350px",
@@ -22,6 +24,8 @@ export default {
         "500": "500px",
         "300": "300px",
         "200": "200px",
+        "220": "220px",
+        "150": "150px",
       },
       keyframes: {
         pulsing: {

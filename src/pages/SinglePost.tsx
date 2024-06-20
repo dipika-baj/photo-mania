@@ -67,10 +67,13 @@ const SinglePost = () => {
         </div>
         {loggedUser === post.user.id && <DropDownMenu post={post} />}
       </div>
-      <div className="w-full rounded-md shadow-md">
-        <img src={getImageURL(post.imageUrl)} className="m-auto rounded-md" />
+      <div className="aspect-[16/9] w-full rounded-md shadow-md">
+        <img
+          src={getImageURL(post.imageUrl)}
+          className="h-full w-full rounded-md object-cover object-center"
+        />
       </div>
-      <div className="flex gap-3">
+      <div>
         <Link
           to={
             loggedUser === post.user.id
@@ -78,9 +81,11 @@ const SinglePost = () => {
               : `/user/${post.user.username}`
           }
         >
-          <p className="font-semibold">{post.user.username}</p>
+          <span className="font-semibold">{post.user.username}</span>
         </Link>
-        {post.caption && <p>{post.caption}</p>}
+        {post.caption && (
+          <span className="break-all">&nbsp;&nbsp;{post.caption}</span>
+        )}
       </div>
     </div>
   );

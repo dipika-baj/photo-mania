@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { Upload } from "lucide-react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { Pencil, Upload } from "lucide-react";
+import { ChangeEvent, createRef, useEffect, useState } from "react";
+import { Cropper, ReactCropperElement } from "react-cropper";
 import { toast } from "sonner";
 
 import { useModalContext } from "../context/ModalContext";
@@ -9,11 +10,10 @@ import { queryClient } from "../utils/clientQuery";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
 import { getImageURL } from "../utils/imageUrl";
 import { getCookie } from "../utils/token";
+import H3 from "./reusable/typography/H3";
 interface Prop {
   singlePost: Post;
 }
-
-//TODO : Use zod and make it reusable
 
 const UpdatePost = ({ singlePost }: Prop) => {
   const [post, setPost] = useState<PostForm>({
@@ -27,6 +27,8 @@ const UpdatePost = ({ singlePost }: Prop) => {
     image: "",
     caption: "",
   });
+
+  const cropperRef = createRef<ReactCropperElement>();
 
   useEffect(() => {
     if (singlePost.imageUrl) {
@@ -112,19 +114,38 @@ const UpdatePost = ({ singlePost }: Prop) => {
       }));
     }
   };
+  const onCropStart = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
+        if (blob) {
+          const file = new File([blob], "cropped_image.png", {
+            type: "image/png",
+          });
+          setPost((post) => ({ ...post, image: file }));
+        }
+      });
+    }
+  };
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-bold">Update Post</h2>
+      <H3>Update Post</H3>
       <form className="flex flex-col gap-4" onSubmit={createPost}>
         {imagePreview ? (
-          <div className="flex flex-col gap-4">
-            <img className="m-auto max-w-200 md:max-w-300" src={imagePreview} />
-            <div className="flex justify-center gap-3">
+          <div className="relative flex flex-col gap-4">
+            <Cropper
+              style={{ width: "100%" }}
+              ref={cropperRef}
+              aspectRatio={16 / 9}
+              src={imagePreview}
+              guides={true}
+              cropstart={onCropStart}
+            />
+            <div className="absolute right-3 top-3 flex justify-center gap-3">
               <label
-                className="cursor-pointer rounded-md bg-blue p-3 text-center text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"
+                className="cursor-pointer rounded-md bg-blue p-2 text-center text-white transition-colors duration-200 hover:bg-dark-blue"
                 htmlFor="image"
               >
-                Change
+                <Pencil size={16} />
               </label>
             </div>
 
@@ -166,9 +187,9 @@ const UpdatePost = ({ singlePost }: Prop) => {
         )}
         <div>
           <textarea
-            rows={6}
+            rows={5}
             placeholder="Caption"
-            className="w-full rounded-md border-2 border-light-gray p-4 outline-none placeholder:text-black"
+            className="w-full resize-none rounded-md border-2 border-light-gray p-4 outline-none placeholder:text-black"
             onChange={handleCaptionChange}
             maxLength={150}
             value={post.caption}
@@ -179,7 +200,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
         </div>
 
         <button
-          className="w-full rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
+          className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
           disabled={isPending}
         >
           Update Post

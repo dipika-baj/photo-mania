@@ -28,6 +28,10 @@ const PostGrid = ({
   if (includeUser === undefined) {
     includeUser = true;
   }
+
+  if (!loading && posts.length === 0) {
+    return <p className="text-center">No Posts Yet</p>;
+  }
   return (
     <>
       <div className="flex justify-center">

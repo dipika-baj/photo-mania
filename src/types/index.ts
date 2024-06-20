@@ -4,6 +4,8 @@ export enum ActiveModal {
   editPost,
   deletePost,
   editProfile,
+  updateProfilePic,
+  removeProfilePic,
 }
 
 export interface Post {

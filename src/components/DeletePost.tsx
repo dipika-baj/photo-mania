@@ -43,9 +43,13 @@ const DeletePost = ({ postId }: { postId: number }) => {
     return <Loading />;
   }
 
+  /**
+   * TODO
+   * Cancel button color on hover
+   */
   return (
-    <div className="flex min-h-300 flex-col items-center justify-center gap-5">
-      <div className="text-red-600">
+    <div className="flex flex-col items-center justify-center gap-5">
+      <div className="text-red-500">
         <Trash size={32} />
       </div>
       <p className="font-semibold">
@@ -56,13 +60,13 @@ const DeletePost = ({ postId }: { postId: number }) => {
           className="w-full rounded-md bg-light-gray px-6 py-3 text-black transition-colors duration-200 hover:bg-blue hover:text-white"
           onClick={() => hideModal()}
         >
-          No
+          Cancel
         </button>
         <button
-          className="w-full rounded-md bg-red-600 px-6 py-3 text-white transition-colors duration-200 hover:bg-red-700"
+          className="w-full rounded-md bg-red-500 px-6 py-3 text-white transition-colors duration-200 hover:bg-red-600"
           onClick={() => setEnabled(true)}
         >
-          Yes
+          Delete
         </button>
       </div>
     </div>

@@ -18,6 +18,12 @@ interface Props {
 }
 
 const UpdateProfileForm = ({ firstName, lastName, username }: Props) => {
+  /**
+   * TODO
+   * Change Edit button to icon
+   * Save button color
+   * Modal heading
+   */
   const { setShowModal } = useModalContext();
   const {
     register,
