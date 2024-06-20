@@ -40,7 +40,6 @@ const Explore = () => {
 
   return (
     <div className="m-auto flex w-10/12 flex-col gap-6 py-3 md:max-w-1350">
-      <Loading />
       <div className="my-4 text-center">
         <H1>Explore</H1>
       </div>

@@ -7,6 +7,7 @@ import { ActiveModal, User } from "../../types";
 import { getImageURL } from "../../utils/imageUrl";
 import { getInitials } from "../../utils/profile";
 import EditProfilePicture from "../EditProfilePicture";
+import RemoveProfilePicture from "../RemoveProfilePicture";
 import Modal from "./Modal";
 import Seperator from "./Seperator";
 import H1 from "./typography/H1";
@@ -65,7 +66,10 @@ const UserDetails = ({ user, showUpload }: Prop) => {
                     <>
                       <Seperator />
                       <button
-                        onClick={() => setDropDown(false)}
+                        onClick={() => {
+                          setDropDown(false);
+                          setShowModal(ActiveModal.removeProfilePic);
+                        }}
                         className="px-4 py-2 text-left hover:bg-light-gray"
                       >
                         Remove Image
@@ -94,6 +98,11 @@ const UserDetails = ({ user, showUpload }: Prop) => {
             firstName={user.firstName}
             lastName={user.lastName}
           />
+        </Modal>
+      )}
+      {showModal === ActiveModal.removeProfilePic && (
+        <Modal>
+          <RemoveProfilePicture />
         </Modal>
       )}
     </>
