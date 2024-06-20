@@ -1,7 +1,8 @@
 import { Ellipsis } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { useModalContext } from "../context/ModalContext";
+import { useClickOutside } from "../hooks/useOutsideClick";
 import { ActiveModal, Post } from "../types";
 import DeletePost from "./DeletePost";
 import Modal from "./reusable/Modal";
@@ -13,14 +14,27 @@ interface Prop {
 
 const DropDownMenu = ({ post }: Prop) => {
   const [dropDown, setDropDown] = useState<boolean>(false);
+
+  const dropDownRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(dropDownRef, () => {
+    setDropDown(false);
+  });
   const { showModal, setShowModal } = useModalContext();
+  /***
+   * TODO
+   * Dropdown menu style
+   */
   return (
     <>
       <button onClick={() => setDropDown((prev) => !prev)}>
         <Ellipsis strokeWidth={3} />
       </button>
       {dropDown && (
-        <div className="absolute right-0 flex translate-y-full flex-col rounded-md bg-white shadow-2xl">
+        <div
+          ref={dropDownRef}
+          className="absolute right-0 flex translate-y-full flex-col rounded-md bg-white shadow-2xl"
+        >
           <button
             onClick={() => {
               setShowModal(ActiveModal.editPost);

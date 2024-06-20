@@ -14,6 +14,6 @@ const months: { [key: number]: string } = {
 };
 export const getDate = (date: string) => {
   const postDate = new Date(date);
-  const formattedDate = `${postDate.getDate()} ${months[postDate.getMonth()]} , ${postDate.getFullYear()} at ${postDate.getHours()}:${postDate.getMinutes()}`;
+  const formattedDate = `${postDate.getDate()} ${months[postDate.getMonth()]}, ${postDate.getFullYear()} at ${postDate.getHours()}:${postDate.getMinutes()}`;
   return formattedDate;
 };

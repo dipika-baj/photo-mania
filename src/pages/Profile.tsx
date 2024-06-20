@@ -15,9 +15,9 @@ const Profile = () => {
   const { showModal, setShowModal } = useModalContext();
 
   const { isLoading, error, data } = useQuery<UserResult>({
-    queryKey: ["loggedUser"],
+    queryKey: ["profile"],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/me/`, {
+      fetch(`http://localhost:3000/api/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -39,11 +39,12 @@ const Profile = () => {
   if (!user) {
     return <p>No user Found</p>;
   }
+
   return (
     <>
-      <div className="m-auto flex w-10/12 flex-col gap-20 md:max-w-1350">
-        <div className="flex items-center gap-8">
-          <UserDetails user={user} />
+      <div className="-z-10 m-auto flex w-10/12 flex-col gap-20 md:max-w-1350">
+        <div className="relative mt-10 flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
+          <UserDetails user={user} showUpload />
           <button
             onClick={() => setShowModal(ActiveModal.editProfile)}
             className="rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-light-gray hover:text-black"
@@ -55,7 +56,7 @@ const Profile = () => {
       </div>
       {showModal === ActiveModal.editProfile && (
         <Modal>
-          <EditProfile />
+          <EditProfile user={user} />
         </Modal>
       )}
     </>

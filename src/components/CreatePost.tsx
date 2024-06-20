@@ -8,6 +8,7 @@ import { PostForm, PostFormError } from "../types";
 import { queryClient } from "../utils/clientQuery";
 import { ACCEPTED_IMAGE_TYPES } from "../utils/constants";
 import { getCookie } from "../utils/token";
+import H3 from "./reusable/typography/H3";
 
 const CreatePost = () => {
   const [post, setPost] = useState<PostForm>({
@@ -21,6 +22,7 @@ const CreatePost = () => {
   const [imagePreview, setImagePreview] = useState<string>("");
   const { hideModal } = useModalContext();
   const token = getCookie("token");
+  const userId = Number(getCookie("userId"));
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createPosts"],
@@ -38,6 +40,7 @@ const CreatePost = () => {
     onSuccess: (data) => {
       if (data.status === "success") {
         queryClient.invalidateQueries({ queryKey: ["posts"] });
+        queryClient.invalidateQueries({ queryKey: ["userPosts", userId] });
         toast.success("Post Created");
         hideModal();
       }
@@ -108,16 +111,21 @@ const CreatePost = () => {
       image: null,
     }));
   };
+  /**
+   * TODO
+   * Remove change and remove button
+   * Loading State in buttons while calling api
+   */
 
   return (
     <>
       <div className="flex flex-col gap-4">
-        <h2 className="font-bold">Create New Post</h2>
+        <H3>Create New Post</H3>
         <form className="flex flex-col gap-4" onSubmit={createPost}>
           {imagePreview ? (
             <div className="flex flex-col gap-4">
               <img
-                className="m-auto max-w-200 md:max-w-300"
+                className="m-auto max-w-200 cursor-pointer border-2 border-dashed border-light-gray p-2 md:max-w-300"
                 src={imagePreview}
               />
               <div className="flex justify-center gap-3">
@@ -173,9 +181,9 @@ const CreatePost = () => {
           )}
           <div>
             <textarea
-              rows={6}
+              rows={5}
               placeholder="Caption"
-              className="w-full rounded-md border-2 border-light-gray p-4 outline-none placeholder:text-black"
+              className="w-full resize-none rounded-md border-2 border-light-gray p-4 outline-none"
               onChange={handleCaptionChange}
               maxLength={150}
             />
@@ -185,7 +193,7 @@ const CreatePost = () => {
           </div>
 
           <button
-            className="w-full rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
+            className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
             disabled={isPending}
           >
             Create Post

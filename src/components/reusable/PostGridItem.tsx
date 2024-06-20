@@ -16,11 +16,11 @@ const PostGridItem = ({ post, includeUser }: Prop) => {
   return (
     <div className="flex flex-col justify-end gap-2">
       <Link to={`/post/${post.id}`}>
-        <div className="aspect-square w-full rounded-md shadow-md">
+        <div className="aspect-[16/9] w-full rounded-md shadow-md">
           <img
             src={getImageURL(post.imageUrl)}
             alt={post.imageName}
-            className="h-full w-full rounded-md object-fill object-center"
+            className="h-full w-full rounded-md object-cover object-center"
           />
         </div>
       </Link>

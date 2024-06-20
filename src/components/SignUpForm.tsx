@@ -62,7 +62,11 @@ const SignUpForm = ({ onTabChange }: Prop) => {
   };
 
   return (
-    <form className="w-full" onSubmit={handleSubmit(registerUser)}>
+    <form
+      className="w-full"
+      onSubmit={handleSubmit(registerUser)}
+      autoComplete="off"
+    >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-6 md:flex-row">
           <div className="w-full md:w-1/2">
@@ -149,7 +153,7 @@ const SignUpForm = ({ onTabChange }: Prop) => {
         <input
           type="submit"
           value={"Sign Up"}
-          className="w-full rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
+          className="hover:bg-dark-blue w-full rounded-md bg-blue p-3 text-white transition-colors duration-200"
         />
       </div>
     </form>

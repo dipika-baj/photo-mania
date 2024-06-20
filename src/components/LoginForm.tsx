@@ -63,7 +63,7 @@ const LoginForm = () => {
             <input
               {...register("emailUsername")}
               type="text"
-              placeholder="Email"
+              placeholder="Email or Username"
               className="w-full rounded-md border-2 p-2"
             />
             {errors.emailUsername && (
@@ -89,7 +89,7 @@ const LoginForm = () => {
         <input
           type="submit"
           value={"Log In"}
-          className="w-full cursor-pointer rounded-md bg-pink p-3 text-white transition-colors duration-200 hover:bg-dark-pink"
+          className="hover:bg-dark-blue w-full cursor-pointer rounded-md bg-blue p-3 text-white transition-colors duration-200"
         />
       </div>
     </form>
