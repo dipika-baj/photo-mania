@@ -16,7 +16,7 @@ interface Props {
 }
 
 const UpdateProfile = ({ user }: Props) => {
-  const { setShowModal } = useModalContext();
+  const { hideModal } = useModalContext();
   const {
     register,
     handleSubmit,
@@ -52,13 +52,13 @@ const UpdateProfile = ({ user }: Props) => {
         return;
       }
       queryClient.invalidateQueries({ queryKey: ["profile"] });
-      toast.success("Profile Updated");
-      setShowModal(null);
+      toast.success("Profile updated");
+      hideModal();
     },
 
     onError: () => {
-      toast.error("An Error Has Occured");
-      setShowModal(null);
+      toast.error("Profile could not be updated");
+      hideModal();
     },
   });
 

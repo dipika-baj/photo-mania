@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { useModalContext } from "../context/ModalContext";
 import { ErrorResponse, SignUpFormData } from "../types";
 import { signUpSchema } from "../utils/zodSchemas";
 
@@ -13,6 +14,8 @@ interface Prop {
 
 const SignUpForm = ({ onTabChange }: Prop) => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
+
+  const { hideModal } = useModalContext();
 
   const {
     register,
@@ -40,12 +43,13 @@ const SignUpForm = ({ onTabChange }: Prop) => {
       } else {
         setResponseError(null);
         onTabChange("login");
-        toast.success("Register Successful");
+        toast.success("Register successful");
       }
     },
 
     onError: () => {
-      return <p>An Error has occured</p>;
+      toast.error("Register unsuccessful");
+      hideModal();
     },
   });
 

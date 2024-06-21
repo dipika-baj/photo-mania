@@ -42,9 +42,14 @@ const CreatePost = () => {
       if (data.status === "success") {
         queryClient.invalidateQueries({ queryKey: ["posts"] });
         queryClient.invalidateQueries({ queryKey: ["profilePosts"] });
-        toast.success("Post Created");
+        toast.success("Post created");
         hideModal();
       }
+    },
+
+    onError: () => {
+      toast.error("Post could not be created");
+      hideModal();
     },
   });
 

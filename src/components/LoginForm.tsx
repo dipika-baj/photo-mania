@@ -42,12 +42,13 @@ const LoginForm = () => {
         setResponseError(null);
         hideModal();
         logIn(data.data);
-        toast.success("Login Successful");
+        toast.success("Login successful");
       }
     },
 
     onError: () => {
-      return <p>An Error has occured</p>;
+      toast.error("Login unsuccessful");
+      hideModal();
     },
   });
 

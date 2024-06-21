@@ -58,14 +58,19 @@ const UpdatePost = ({ singlePost }: Prop) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", singlePost.id] });
-      toast.success("Post Updated");
+      toast.success("Post updated");
       hideModal();
       setPost({ image: null, caption: "" });
       setImagePreview("");
     },
+
+    onError: () => {
+      toast.error("Post could not be updated");
+      hideModal();
+    },
   });
 
-  const createPost = (e: React.FormEvent<HTMLFormElement>) => {
+  const updatePost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
     if (post.image) formData.append("image", post.image);
@@ -115,14 +120,11 @@ const UpdatePost = ({ singlePost }: Prop) => {
     }
   };
   const onCropStart = () => {
-    if (!post.image) {
-      return;
-    }
     if (typeof cropperRef.current?.cropper !== "undefined") {
       cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
         if (blob) {
-          const file = new File([blob], post.image!.name, {
-            type: post.image!.type,
+          const file = new File([blob], "cropped_image.png", {
+            type: "image/png",
           });
           setPost((post) => ({ ...post, image: file }));
         }
@@ -132,7 +134,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
   return (
     <div className="flex flex-col gap-4">
       <H3>Update Post</H3>
-      <form className="flex flex-col gap-4" onSubmit={createPost}>
+      <form className="flex flex-col gap-4" onSubmit={updatePost}>
         {imagePreview ? (
           <div className="relative flex flex-col gap-4">
             <Cropper

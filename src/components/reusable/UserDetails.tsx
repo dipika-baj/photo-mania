@@ -36,7 +36,10 @@ const UserDetails = ({ user, showUpload, showUpdate }: Prop) => {
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:gap-8">
         <div className="relative aspect-square w-200 rounded-full border-2 border-light-gray">
           {user.imageUrl ? (
-            <img src={getImageURL(user.imageUrl)} className="rounded-full" />
+            <img
+              src={getImageURL(user.imageUrl)}
+              className="w-full rounded-full"
+            />
           ) : (
             <div className="flex h-200 w-200 items-center justify-center rounded-full bg-light-gray text-4xl font-bold uppercase text-white">
               {getInitials(user.firstName, user.lastName)}

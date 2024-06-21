@@ -80,8 +80,8 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
       cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
         if (blob) {
-          const file = new File([blob], newImage!.name, {
-            type: newImage!.type,
+          const file = new File([blob], "cropped_image.png", {
+            type: "image/png",
           });
           setNewImage(file);
         }
