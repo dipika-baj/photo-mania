@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 import { useAuthContext } from "../context/AuthContext";
@@ -7,38 +7,42 @@ import { getCookie } from "../utils/token";
 
 const LogOut = () => {
   const { logOut } = useAuthContext();
-  const [enabled, setEnabled] = useState(false);
 
   const token = getCookie("token");
 
-  const { isLoading, error } = useQuery({
-    enabled: enabled,
-    queryKey: ["logout"],
-    queryFn: () =>
-      fetch("http://localhost:3000/api/auth/logout", {
+  const navigate = useNavigate();
+
+  const { isPending, mutate } = useMutation({
+    mutationKey: ["logout"],
+    mutationFn: () =>
+      fetch(`${import.meta.env.VITE_API}/auth/logout`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       }).then((res) => {
-        if (res.ok) {
-          logOut();
-          toast.success("Logout Sucessful");
-          setEnabled(false);
-          return res.json();
+        if (!res.ok) {
+          throw Error("Logout unsuccesful");
         }
+        return res.json();
       }),
-  });
 
-  if (error) toast.error("Unsucessful");
+    onSuccess: () => {
+      logOut();
+      toast.success("Logout sucessful");
+      navigate("/");
+    },
+
+    onError: () => {
+      toast.error("Logout unsucessful");
+    },
+  });
 
   return (
     <button
-      className="border-b border-light-gray px-6 py-2 hover:bg-light-gray"
-      onClick={() => {
-        setEnabled(true);
-      }}
-      disabled={isLoading}
+      className="px-4 py-2 text-left hover:bg-light-gray"
+      onClick={() => mutate()}
+      disabled={isPending}
     >
       Logout
     </button>

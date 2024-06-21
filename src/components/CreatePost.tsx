@@ -23,13 +23,12 @@ const CreatePost = () => {
   const [imagePreview, setImagePreview] = useState<string>("");
   const { hideModal } = useModalContext();
   const token = getCookie("token");
-  const userId = Number(getCookie("userId"));
   const cropperRef = createRef<ReactCropperElement>();
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["createPosts"],
     mutationFn: (data: FormData) =>
-      fetch("http://localhost:3000/api/post/create", {
+      fetch(`${import.meta.env.VITE_API}/post/create`, {
         method: "POST",
         body: data,
         headers: {
@@ -42,10 +41,15 @@ const CreatePost = () => {
     onSuccess: (data) => {
       if (data.status === "success") {
         queryClient.invalidateQueries({ queryKey: ["posts"] });
-        queryClient.invalidateQueries({ queryKey: ["userPosts", userId] });
-        toast.success("Post Created");
+        queryClient.invalidateQueries({ queryKey: ["profilePosts"] });
+        toast.success("Post created");
         hideModal();
       }
+    },
+
+    onError: () => {
+      toast.error("Post could not be created");
+      hideModal();
     },
   });
 
@@ -88,7 +92,7 @@ const CreatePost = () => {
 
   const handleCaptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value;
-    if (caption.length === 150) {
+    if (caption.length >= 150) {
       setFormError((error) => ({
         ...error,
         caption: "Caption cannot exceed 150 character",
@@ -117,8 +121,8 @@ const CreatePost = () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
       cropperRef.current?.cropper.getCroppedCanvas().toBlob((blob) => {
         if (blob) {
-          const file = new File([blob], "cropped_image.png", {
-            type: "image/png",
+          const file = new File([blob], post.image!.name, {
+            type: post.image!.type,
           });
           setPost((post) => ({ ...post, image: file }));
         }
@@ -134,12 +138,14 @@ const CreatePost = () => {
           {imagePreview ? (
             <div className="relative flex flex-col gap-4">
               <Cropper
-                style={{ width: "100%" }}
+                style={{ width: "100%", maxHeight: "400px" }}
                 ref={cropperRef}
                 aspectRatio={16 / 9}
                 src={imagePreview}
                 guides={true}
-                cropstart={onCropStart}
+                crop={onCropStart}
+                viewMode={1}
+                autoCropArea={1}
               />
               <div className="absolute right-3 top-3 flex flex-col items-center gap-3">
                 <label
@@ -149,7 +155,7 @@ const CreatePost = () => {
                   <PencilIcon size={16} />
                 </label>
                 <button
-                  className="hover:bg-dark-gray rounded-md bg-light-gray p-2 text-black transition-colors duration-200"
+                  className="rounded-md bg-light-gray p-2 text-black transition-colors duration-200 hover:bg-dark-gray"
                   onClick={handleRemoveImage}
                 >
                   <X size={16} />

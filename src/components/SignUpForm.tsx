@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { useModalContext } from "../context/ModalContext";
 import { ErrorResponse, SignUpFormData } from "../types";
 import { signUpSchema } from "../utils/zodSchemas";
 
@@ -14,6 +15,8 @@ interface Prop {
 const SignUpForm = ({ onTabChange }: Prop) => {
   const [responseError, setResponseError] = useState<ErrorResponse | null>();
 
+  const { hideModal } = useModalContext();
+
   const {
     register,
     handleSubmit,
@@ -22,10 +25,10 @@ const SignUpForm = ({ onTabChange }: Prop) => {
     resolver: zodResolver(signUpSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["signUp"],
     mutationFn: (data: SignUpFormData) =>
-      fetch("http://localhost:3000/api/auth/register", {
+      fetch(`${import.meta.env.VITE_API}/auth/register`, {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
@@ -40,12 +43,13 @@ const SignUpForm = ({ onTabChange }: Prop) => {
       } else {
         setResponseError(null);
         onTabChange("login");
-        toast.success("Register Successful");
+        toast.success("Register successful");
       }
     },
 
     onError: () => {
-      return <p>An Error has occured</p>;
+      toast.error("Register unsuccessful");
+      hideModal();
     },
   });
 
@@ -96,7 +100,7 @@ const SignUpForm = ({ onTabChange }: Prop) => {
           <div className="w-full">
             <input
               {...register("email")}
-              type="email"
+              type="text"
               placeholder="Email"
               className="w-full rounded-md border-2 p-2"
             />
@@ -153,7 +157,8 @@ const SignUpForm = ({ onTabChange }: Prop) => {
         <input
           type="submit"
           value={"Sign Up"}
-          className="hover:bg-dark-blue w-full rounded-md bg-blue p-3 text-white transition-colors duration-200"
+          className="w-full cursor-pointer rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-black"
+          disabled={isPending}
         />
       </div>
     </form>

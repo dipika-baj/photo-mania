@@ -13,7 +13,7 @@ const RemoveProfilePicture = () => {
   const { mutate } = useMutation({
     mutationKey: ["updateProfilePic"],
     mutationFn: () =>
-      fetch(`http://localhost:3000/api/me/removePic`, {
+      fetch(`${import.meta.env.VITE_API}/user/removeProfileImage`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -38,10 +38,10 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
     }
   };
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationKey: ["updateProfilePic"],
     mutationFn: (data: FormData) =>
-      fetch(`http://localhost:3000/api/me`, {
+      fetch(`${import.meta.env.VITE_API}/user`, {
         method: "PUT",
         body: data,
         headers: {
@@ -54,6 +54,13 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["profile"] });
       toast.success("Profile Picture Updated");
+      hideModal();
+      setNewImage(null);
+      setImagePreview("");
+    },
+
+    onError: () => {
+      toast.error("Profile Picture Could Not Be Updated");
       hideModal();
       setNewImage(null);
       setImagePreview("");
@@ -92,7 +99,9 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
             aspectRatio={1}
             src={imagePreview}
             guides={true}
-            cropstart={onCropStart}
+            crop={onCropStart}
+            viewMode={1}
+            autoCropArea={1}
           />
           <label
             htmlFor="image"
@@ -124,20 +133,11 @@ const EditProfilePicture = ({ image, firstName, lastName }: Prop) => {
         accept=".jpg,.jpeg,.png,.webp"
         onChange={handleImageChange}
       />
-      {/* {imagePreview && (
-        <Cropper
-          style={{ height: 400, width: "100%" }}
-          ref={cropperRef}
-          initialAspectRatio={1}
-          src={imagePreview}
-          guides={true}
-          cropstart={onCropStart}
-        />
-      )} */}
+
       {formError && <span className="text-red-600">{formError}</span>}
       <button
         className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray"
-        disabled={!newImage}
+        disabled={!newImage || isPending}
       >
         Upload
       </button>

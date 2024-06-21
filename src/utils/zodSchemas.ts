@@ -16,7 +16,7 @@ export const signUpSchema: ZodType<SignUpFormData> = z
       .min(1, { message: "First name cannot be empty." })
       .regex(NAME_REGEX, {
         message:
-          "Name can have only aphabets and must be minimum 3 characters.",
+          "Name can only start with an alphabet and must be minimum 3 characters.",
       }),
     lastName: z
       .string()
@@ -24,7 +24,7 @@ export const signUpSchema: ZodType<SignUpFormData> = z
       .min(1, { message: "Last name cannot be empty." })
       .regex(NAME_REGEX, {
         message:
-          "Name can have only aphabets and must be minimum 3 characters.",
+          "Name can only start with an alphabet and must be minimum 3 characters.",
       }),
     email: z
       .string()

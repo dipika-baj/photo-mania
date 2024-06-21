@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 
 import DropDownMenu from "../components/DropDownMenu";
+import NotFound from "../components/NotFound";
 import ErrorComponent from "../components/reusable/ErrorComponent";
 import Loading from "../components/reusable/Loading";
 import { useAuthContext } from "../context/AuthContext";
-import { PostResult } from "../types";
+import { SinglePostResult } from "../types";
 import { getDate } from "../utils/date";
 import { getImageURL } from "../utils/imageUrl";
 import { getInitials } from "../utils/profile";
@@ -14,23 +15,26 @@ const SinglePost = () => {
   const { postId } = useParams();
   const { loggedUser } = useAuthContext();
 
-  const { isLoading, error, data } = useQuery<PostResult>({
+  const { isLoading, error, data } = useQuery<SinglePostResult>({
     queryKey: ["post", Number(postId)],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/post/${postId}`).then((res) =>
+      fetch(`${import.meta.env.VITE_API}/post/${postId}`).then((res) =>
         res.json(),
       ),
   });
 
   if (isLoading) return <Loading />;
 
-  if (error || !data) return <ErrorComponent />;
-  const post = data.data[0];
+  if (error) return <ErrorComponent />;
+
+  if (!data) return <NotFound />;
+
+  const post = data.data;
   const date = getDate(post.createdAt);
 
   return (
-    <div className="m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3 lg:max-w-600">
-      <div className="relative flex w-full items-end justify-between">
+    <div className="relative m-auto my-5 flex w-10/12 flex-col items-start gap-5 py-3 lg:max-w-600">
+      <div className="flex w-full items-end justify-between">
         <div className="flex items-center gap-3">
           <Link
             to={

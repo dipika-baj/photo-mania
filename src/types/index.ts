@@ -42,6 +42,10 @@ export interface PostResult {
   pagination: Pagination;
 }
 
+export interface SinglePostResult {
+  data: Post;
+}
+
 export interface UserResult {
   data: User;
   status: string;

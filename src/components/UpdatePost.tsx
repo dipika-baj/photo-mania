@@ -46,7 +46,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
   const { mutate, isPending } = useMutation({
     mutationKey: ["updatePosts", singlePost.id],
     mutationFn: (data: FormData) =>
-      fetch(`http://localhost:3000/api/me/post/${singlePost.id}`, {
+      fetch(`${import.meta.env.VITE_API}/post/${singlePost.id}`, {
         method: "PUT",
         body: data,
         headers: {
@@ -58,14 +58,19 @@ const UpdatePost = ({ singlePost }: Prop) => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post", singlePost.id] });
-      toast.success("Post Updated");
+      toast.success("Post updated");
       hideModal();
       setPost({ image: null, caption: "" });
       setImagePreview("");
     },
+
+    onError: () => {
+      toast.error("Post could not be updated");
+      hideModal();
+    },
   });
 
-  const createPost = (e: React.FormEvent<HTMLFormElement>) => {
+  const updatePost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
     if (post.image) formData.append("image", post.image);
@@ -98,7 +103,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
 
   const handleCaptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const caption = e.target.value;
-    if (caption.length === 150) {
+    if (caption.length >= 150) {
       setFormError((error) => ({
         ...error,
         caption: "Caption cannot exceed 150 character",
@@ -129,16 +134,18 @@ const UpdatePost = ({ singlePost }: Prop) => {
   return (
     <div className="flex flex-col gap-4">
       <H3>Update Post</H3>
-      <form className="flex flex-col gap-4" onSubmit={createPost}>
+      <form className="flex flex-col gap-4" onSubmit={updatePost}>
         {imagePreview ? (
           <div className="relative flex flex-col gap-4">
             <Cropper
-              style={{ width: "100%" }}
+              style={{ width: "100%", maxHeight: "400px" }}
               ref={cropperRef}
               aspectRatio={16 / 9}
               src={imagePreview}
               guides={true}
-              cropstart={onCropStart}
+              crop={onCropStart}
+              viewMode={1}
+              autoCropArea={1}
             />
             <div className="absolute right-3 top-3 flex justify-center gap-3">
               <label
@@ -200,7 +207,7 @@ const UpdatePost = ({ singlePost }: Prop) => {
         </div>
 
         <button
-          className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue"
+          className="w-full rounded-md bg-blue p-3 text-white transition-colors duration-200 hover:bg-dark-blue disabled:cursor-not-allowed disabled:bg-light-gray disabled:text-black"
           disabled={isPending}
         >
           Update Post

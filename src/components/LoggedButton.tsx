@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, Plus } from "lucide-react";
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useModalContext } from "../context/ModalContext";
 import { useClickOutside } from "../hooks/useOutsideClick";
@@ -10,11 +10,14 @@ import { getImageURL } from "../utils/imageUrl";
 import { getInitials } from "../utils/profile";
 import { getCookie } from "../utils/token";
 import LogOut from "./LogOut";
+import Seperator from "./reusable/Seperator";
 
 const LoggedButton = () => {
   const [dropdown, setDropDown] = useState(false);
 
   const dropDownRef = useRef<HTMLDivElement>(null);
+
+  const navigate = useNavigate();
 
   useClickOutside(dropDownRef, () => {
     setDropDown(false);
@@ -26,7 +29,7 @@ const LoggedButton = () => {
   const { data } = useQuery<UserResult>({
     queryKey: ["profile"],
     queryFn: () =>
-      fetch(`http://localhost:3000/api/me`, {
+      fetch(`${import.meta.env.VITE_API}/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,25 +81,27 @@ const LoggedButton = () => {
       {dropdown && (
         <div
           ref={dropDownRef}
-          className="absolute right-0 top-full z-50 flex w-9/12 flex-col rounded-md bg-white shadow-2xl"
+          className="absolute right-0 top-10 z-50 flex w-9/12 flex-col rounded-md border border-light-gray bg-white shadow-2xl"
         >
-          <Link to="/profile">
-            <button
-              onClick={() => setDropDown(false)}
-              className="border-b border-light-gray px-6 py-2 hover:bg-light-gray"
-            >
-              View Profile
-            </button>
-          </Link>
+          <button
+            onClick={() => {
+              navigate("/profile");
+            }}
+            className="px-4 py-2 text-left hover:bg-light-gray"
+          >
+            View Profile
+          </button>
+          <Seperator />
           <button
             onClick={() => {
               setShowModal(ActiveModal.createPost);
               setDropDown(false);
             }}
-            className="border-b border-light-gray px-6 py-2 hover:bg-light-gray"
+            className="px-4 py-2 text-left hover:bg-light-gray"
           >
             Create Post
           </button>
+          <Seperator />
           <LogOut />
         </div>
       )}
